@@ -32,24 +32,24 @@ let altoPersonaje = 240;
 function preload() {
   // IDLE
   for (let i = 0; i < 20; i++) {
-    personajeIdle.push(loadImage("/sprites/idle filia" + (i + 1) + ".png"));
+    personajeIdle.push(loadImage("/sprites/idle" + (i + 1) + ".png"));
   }
 
   // WALK FORWARD
   for (let i = 0; i < 7; i++) {
-    personajeForward.push(loadImage('/sprites/walk forward filia' + (i + 1) + '.png'));
+    personajeForward.push(loadImage('/sprites/walk forward filia ' + (i + 1) + '.png'));
   }
 
   // WALK BACKWARD
   for (let i = 0; i < 22; i++) {
     personajeBackward.push(
-      loadImage('/sprites/walk backward filia' + (i + 1) + '.png')
+      loadImage('/sprites/walkbackward' + (i + 1) + '.png')
     );
   }
 }
 
 function setup() {
-  createCanva(800, 600);
+  createCanvas(800, 600);
   imageMode(CENTER);
   tiempoAnterior = millis();
 }
