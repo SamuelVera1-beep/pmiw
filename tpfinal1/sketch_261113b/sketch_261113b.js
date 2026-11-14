@@ -104,6 +104,16 @@ let creditosTxt = [
 ];
 let creditosTam = [32, 14, 22, 16, 14, 22, 18, 18, 14, 22, 16, 16, 16, 14, 22, 16, 14, 20];
 
+// animacion del detective en los creditos
+let walking = [];
+let interrogar = [];
+let estadoAnim = "ENTRAR";  
+let animX = -75;            
+let tiempoAnim = 0;
+let escDetective = 3;        
+let altoSprite = 48;
+let animParada = 90;
+
 let btnComenzar = [300, 370, 200, 42, "Comenzar"];
 let btnDetras = [565, 15, 215, 35, "Ir detrás del escritorio"];
 let btnFrente = [565, 15, 215, 35, "Volver al frente"];
@@ -132,6 +142,17 @@ function preload() {
   imgLaura = loadImage(carpeta + "laura.png");
   imgMarcos = loadImage(carpeta + "marcos.png");
   imgSofia = loadImage(carpeta + "sofia.png");
+
+  // el primer cuadro no tiene numero: walking.png, walking1.png, ...
+  walking[0] = loadImage(carpeta + "walking.png");
+  for (let i = 1; i <= 5; i++) {
+    walking[i] = loadImage(carpeta + "walking" + i + ".png");
+  }
+
+  interrogar[0] = loadImage(carpeta + "interrogar.png");
+  for (let i = 1; i <= 7; i++) {
+    interrogar[i] = loadImage(carpeta + "interrogar" + i + ".png");
+  }
 }
 
 
@@ -216,7 +237,7 @@ function dibujarIntro() {
   textSize(15);
   text(
     "Esteban Vidal, un poderoso empresario, está muerto en su despacho la noche de un viernes.\n" +
-    "Hay tres sospechosos: Marcos Ferreyra (su socio comercial), Laura Vidal (su hermana)\n" +
+    "Hay tres sospechosos: Marcos Ferreyra (su socio comercial), Laura Vidal (su hermana) " +
     "y Sofía Méndez (una periodista que investigaba a Vidal).\n\n" +
     "Encuentra las pistas para resolver el caso.",
     80, 190, 640, 140
@@ -408,7 +429,8 @@ function dibujarCreditos() {
   textAlign(CENTER, CENTER);
   for (let i = 0; i < creditosTxt.length; i++) {
     let y = floor(yCreditos) + i * 36;
-    let alfa = constrain(min(y, height - y) / 55, 0, 1) * 255;
+    // cambio
+    let alfa = constrain(min(y, btnReiniciar[1] - 15 - y) / 55, 0, 1) * 255;
     fill(255, alfa);
     textSize(creditosTam[i]);
     text(creditosTxt[i], width / 2, y);
@@ -420,10 +442,75 @@ function dibujarCreditos() {
     yCreditos = height;
   }
 
+  dibujarAnimacion();
+
   dibujarBoton(btnReiniciar, true);
 }
 
+function dibujarAnimacion() {
+  let animY = height / 2 - (altoSprite * escDetective) / 2;
 
+  push();
+  noSmooth();
+
+  switch (estadoAnim) {
+  case "ENTRAR":
+    // aparece caminando por la izquierda
+    reproducirAnimacion(walking, animX, animY, 7, escDetective);
+    animX += 1.5;
+
+    if (animX >= animParada) {
+      animX = animParada;
+      cambiarAnimacion("INTERROGAR");
+    }
+    break;
+
+   case "INTERROGAR":
+    // se detiene antes de tapar los creditos
+    reproducirAnimacion(interrogar, animX, animY, 10, escDetective);
+    tiempoAnim++;
+
+   if (tiempoAnim > 160) {
+      cambiarAnimacion("SALIR");
+    }
+    break;
+
+  case "SALIR":
+    // se va por el mismo lado: se espeja para que mire a la izquierda
+    scale(-1, 1);
+     reproducirAnimacion(walking, -animX - 75, animY, 7, escDetective);
+    animX -= 1.5;
+
+    if (animX < -75) {
+      animX = -75;
+      cambiarAnimacion("ENTRAR");
+    }
+    break;
+  }
+  pop();
+}
+
+function reproducirAnimacion(arreglo, x, y, velocidad, miEsc) {
+  let frameActual = calcularFrame(arreglo.length, velocidad);
+  let img = arreglo[frameActual];
+
+  image(img, x, y, img.width * miEsc, img.height * miEsc);
+}
+
+
+
+function calcularFrame(cantidadFrames, velocidad) {
+  let frame = floor(frameCount / velocidad) % cantidadFrames;
+
+  return frame;
+}
+
+
+
+function cambiarAnimacion(nuevoEstado) {
+  estadoAnim = nuevoEstado;
+  tiempoAnim = 0;
+}
 
 // interfaz, texto y conteo
 
@@ -704,6 +791,8 @@ function cambiarEstado(nuevo) {
 
   if (nuevo == estadoCreditos) {
     yCreditos = height;
+    animX = -75;
+    cambiarAnimacion("ENTRAR");
   }
 }
 
