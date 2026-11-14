@@ -791,7 +791,8 @@ function cambiarEstado(nuevo) {
 
   if (nuevo == estadoCreditos) {
     yCreditos = height;
-    reiniciarAnimacion();
+    animX = -75;
+    cambiarAnimacion("ENTRAR");
   }
 }
 
