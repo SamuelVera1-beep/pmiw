@@ -1,6 +1,7 @@
 // TP2 - Mini juego: "Lluvia de cuchillos"
 // Bautista Zarzoso 125708/2, Samuel Vera 122941/6
-// 
+// Video de Samuel Vera:
+// https://youtu.be/ESoditKH3cY
 
 let juego;
 
