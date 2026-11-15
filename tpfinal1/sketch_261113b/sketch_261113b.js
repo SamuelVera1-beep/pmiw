@@ -1,6 +1,8 @@
 // Bautista Zarzoso 125708/2 - Samuel Vera 122941/6
 // Video de Samuel Vera:
 // https://youtu.be/zzaa4Rol7bs
+// Video de Bautista Zarzoso
+// https://www.youtube.com/watch?v=8e7C7Xa3HVg
 
 let carpeta = "data/";
 let titulo = "EL ASESINATO DE ESTEBAN VIDAL";
